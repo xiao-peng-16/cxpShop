@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+
+	<mapper namespace="com.cxp.shop_springboot.mapper.CommodityMapper">
+
+        <sql id="SearchField">
+            select sort.sortID `sort.sortID`, sort.sortname `sort.sortname`,
+            store.storeID `store.storeID`,  store.storeName `store.storeName`,store.sProvince `store.sProvince`, store.sCity `store.sCity`,
+            store.sGradeDescribe `store.sGradeDescribe`, store.sGradeAttitude `store.sGradeAttitude`,  store.sGradeDeliverySpeed `store.sGradeDeliverySpeed`,
+            cID, cName, cDescribe, cPhotoname, cVIDeoname,bao_you, cPrice, cSalesVolume, cPopularity, cStock
+            from commodity
+            inner join sort  on commodity.sortID  = sort.sortID
+            inner join store on commodity.storeID = store.storeID
+        </sql>
+
+        <sql id="SearchCondition">
+            <where>
+                <if test="searchWord!=null and searchWord!=''">
+                    <bind name="searchWord" value="'%'+searchWord+'%'"/>
+                    <if test="searchSort == 1">
+                        and cName like #{searchWord}
+                    </if>
+                    <if test="searchSort == 2">
+                        and sortname like #{searchWord}
+                    </if>
+                    <if test="searchSort == 3">
+                        and storeName like #{searchWord}
+                    </if>
+                </if>
+            </where>
+        </sql>
+
+        <select id="selSearchList" resultType="Commodity">
+            <include refid="SearchField"/>
+            <include refid="SearchCondition"/>
+            <if test="pageStartLen!=null ">
+                limit #{pageStartLen} ,#{pageStepSize}
+            </if>
+        </select>
+
+
+    <select id="selCountSearchList" resultType="Integer">
+        select count(*) from commodity
+        inner join sort  on commodity.sortID  = sort.sortID
+        inner join store on commodity.storeID = store.storeID
+        <include refid="SearchCondition"/>
+    </select>
+
+    <select id="selSearchDataByCID" resultType="Commodity">
+        <include refid="SearchField"/>
+        where cID = #{cID}
+    </select>
+
+
+
+    </mapper>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.cxp.shop_springboot.mapper.Shop_CarMapper">
+    <select id="selShop_Car_PageDataByUID" resultType="Message_Shop_Car_Commodity">
+            select shop_carID , shop_number,
+            commodity.cID `commodity.cID`, commodity.cName `commodity.cName`, commodity.cDescribe `commodity.cDescribe`,
+            commodity.cPhotoname `commodity.cPhotoname`,  commodity.cPrice `commodity.cPrice`
+            from commodity
+            inner join shop_car  on shop_car.cID  = commodity.cID
+            where uID = #{uID}
+    </select>
+
+</mapper>
