@@ -197,6 +197,7 @@
   }
   .itemBox img{
     height: 110px;
+    max-width: 115px;
   }
 
   .center{
