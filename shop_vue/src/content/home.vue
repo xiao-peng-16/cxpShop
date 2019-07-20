@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="home">
       
         <div class="gg"><img src="../assets/618.jpg"></div>
         <div class="nav_topBox container-fluid"><nav_top :flag_home="true"/></div>
@@ -147,6 +147,7 @@
 </script>
 
 <style scoped>
+.home{height:753px; width:100%; overflow:hidden;}
   .swiperBox{
     width: 900px;
     height: 512px;
