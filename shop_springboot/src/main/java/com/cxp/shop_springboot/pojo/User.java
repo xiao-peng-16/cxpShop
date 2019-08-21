@@ -8,7 +8,15 @@ public class User {
     String photoname;
     double money;
 
+    int shop_CarCount; //购物车数量
 
+    public int getShop_CarCount() {
+        return shop_CarCount;
+    }
+
+    public void setShop_CarCount(int shop_CarCount) {
+        this.shop_CarCount = shop_CarCount;
+    }
 
     public void setuID(int uID) {
         this.uID = uID;

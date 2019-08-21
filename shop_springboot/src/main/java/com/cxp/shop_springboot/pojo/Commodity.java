@@ -3,9 +3,11 @@ package com.cxp.shop_springboot.pojo;
 public class Commodity {
     String cName;       //商品名
     int cID;
+    int storeID;
     Store store;        //商品所属店
     Sort sort; //商品所属种类
     String cDescribe;   //商品描述
+
     Boolean bao_you;     //是否包邮
     String cPhotoname;  //商品图片
     String cVideoname;   //商品视频'
@@ -30,6 +32,14 @@ public class Commodity {
                 ", cPopularity=" + cPopularity +
                 ", cStock=" + cStock +
                 '}';
+    }
+
+    public int getStoreID() {
+        return storeID;
+    }
+
+    public void setStoreID(int storeID) {
+        this.storeID = storeID;
     }
 
     public String getcName() {
