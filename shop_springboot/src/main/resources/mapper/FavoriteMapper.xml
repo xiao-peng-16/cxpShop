@@ -4,15 +4,16 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 
-<mapper namespace="com.cxp.shop_springboot.mapper.Shop_CarMapper">
-    <select id="selShop_Car_PageDataByUID" resultType="Order">
-            select shop_carID , shop_number,
+<mapper namespace="com.cxp.shop_springboot.mapper.FavoriteMapper">
+
+    <select id="selFavoriteList" resultType="Order">
+        select fID ,
             commodity.cID `cID`, commodity.cName `cName`,
             commodity.cPhotoname `cPhotoname`,  commodity.cPrice `cPrice`
-            from commodity
-            inner join shop_car  on shop_car.cID  = commodity.cID
+            from favorite
+            inner join commodity  on favorite.cID  = commodity.cID
             where uID = #{uID}
-            order by shop_carID desc
+            order by fID desc
     </select>
 
 </mapper>
