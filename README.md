@@ -23,10 +23,17 @@
 
 ![购物车](https://github.com/cxp-Git/images/blob/master/%E8%B4%AD%E7%89%A9%E8%BD%A6.jpg)
 
-购物车可以增加减少商品的数量 或删除该商品，最后一起购买。
+购物车可以增加减少商品的数量 或删除该商品、移入收藏夹
 
 购买成功后用户的余额会相应减少，该商品的销量也随之上升
 
+收藏夹：
+![收藏夹](https://github.com/cxp-Git/images/blob/master/%E6%94%B6%E8%97%8F%E5%A4%B9.jpg)
+
+卖家中心：
+![卖家中心](https://github.com/cxp-Git/images/blob/master/%E5%8D%96%E5%AE%B61.jpg)
+![卖家中心](https://github.com/cxp-Git/images/blob/master/%E5%8D%96%E5%AE%B62.jpg)
+![卖家中心](https://github.com/cxp-Git/images/blob/master/%E5%8D%96%E5%AE%B63.jpg)
 
 最后是 登录和注册
 
