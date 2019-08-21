@@ -5,13 +5,13 @@ import enter from '@/content/enter'
 import login from '@/content/login'
 import shop_car from '@/content/shop_car'
 import favorite from '@/content/favorite'
-import about_us from '@/content/about_us'
 import tou_su from '@/content/tou_su'
 import drop_password from '@/content/drop_password'
 import searchPage from '@/content/searchPage'
 import  commodityPage from '@/content/commodityPage'
 import  shop_success from '@/content/shop_success'
 import  error from '@/content/error'
+import  soller_center from '@/content/soller_center'
 Vue.use(Router)
 
 export default new Router({
@@ -46,11 +46,6 @@ export default new Router({
       component:favorite
     },
     {
-      path:'/about_us',
-      name:'about_us',
-      component:about_us
-    },
-    {
       path:'/tou_su',
       name:'tou_su',
       component:tou_su
@@ -79,6 +74,11 @@ export default new Router({
       path:'/error',
       name:'error',
       component:error
+    },
+    {
+      path:'/soller_center',
+      name:'soller_center',
+      component:soller_center
     }
 
 
