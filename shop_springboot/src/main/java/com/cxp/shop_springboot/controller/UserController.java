@@ -1,7 +1,9 @@
 package com.cxp.shop_springboot.controller;
 
-import com.cxp.shop_springboot.pojo.messageResponse.Message_User_FlagEnter;
 import com.cxp.shop_springboot.pojo.User;
+import com.cxp.shop_springboot.pojo.response.ResponseBean;
+import com.cxp.shop_springboot.pojo.response.ResponseFactory;
+import com.cxp.shop_springboot.pojo.response.ResponseStatus;
 import com.cxp.shop_springboot.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -9,6 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
+
+
+/*
+        用户
+ */
 
 @CrossOrigin(allowCredentials = "true")
 @RestController
@@ -29,20 +36,24 @@ public class UserController {
     }
     //账号 密码登录
     @RequestMapping("/selUserByPassword")
-    public Boolean selUserByPassword(User usersrc, HttpSession session) {
-        Message_User_FlagEnter message = new Message_User_FlagEnter();
+    public ResponseBean selUserByPassword(User usersrc, HttpSession session) {
         User userResulf = userService.selUserByPassword(usersrc);
         if (userResulf!=null){
             session.setAttribute("uid",userResulf.getuID());
-            return true;
+            return ResponseFactory.createSuccessResponse(userResulf);
         }else {
-            return false;
+            return ResponseFactory.createFailResponse(ResponseStatus.USER_LOGIN_ERROR);
         }
     }
     //根据session 的id 返回用户
     @RequestMapping("/selUserById")
-    public Message_User_FlagEnter selUserById(HttpSession session) {
-        return userService.selUser_FlagEnterById(session);
+    public ResponseBean selUserById(HttpSession session) {
+        User user = userService.selUserById(session);
+        if (user != null){
+            return ResponseFactory.createSuccessResponse(user);
+        }else {
+            return ResponseFactory.createFailResponse(ResponseStatus.USER_LOGIN_OVERDUE);
+        }
     }
     //退出登录
     @RequestMapping("/outEnter")
