@@ -1,7 +1,7 @@
 <template>
     <div :class="{homePage:flag_home,serachPage:!flag_home}">
 
-        <div class="container">
+        <div class="containerBox">
 
           <div class="left box">
               <router-link :to="{name:'home'}" tag="div"  v-if="!flag_home" id="TianGou">
@@ -11,8 +11,8 @@
 
 
             <ul v-if="flag_enter" >
-              <li><span>Hi, {{this.user.username}}</span></li>
-              <li><span>余额{{this.user.money}}</span></li>
+              <li><span style="cursor:default ">Hi, {{this.user.username}}</span></li>
+              <li><span style="cursor:default">余额{{(this.user.money).toFixed(2)}}</span></li>
               <li><span @click="outenter">退出</span></li>
             </ul>
             <ul v-else>
@@ -26,16 +26,26 @@
           <div class="right box">
             <ul>
               <router-link :to="{name:'shop_car'}" tag="li">
-                <span class="iconfont" style="font-size: 12px">&#xe63a;</span>
+                <span class="iconfont" style="font-size: 12px;" :style="{color: flag_color}">&#xe63a;</span>
                 <span>购物车</span>
+                <span style="color: #FF4400;font-weight: 700" :style="{color: flag_color}">
+                  {{getShop_CarCount()}}
+                </span>
               </router-link>
-              <router-link :to="{name:'favorite'}" tag="li"><span>收藏夹</span></router-link>
-              <router-link :to="{name:'about_us'}" tag="li"><span>关于我们</span></router-link>
+
+              <router-link :to="{name:'favorite'}" tag="li">
+                <span class="iconfont" style="font-size: 12px;">&#xe636;</span>
+                <span>收藏夹</span>
+              </router-link>
+              <router-link :to="{name:'soller_center'}" tag="li"><span>卖家中心</span></router-link>
+
+<!--              <router-link :to="{name:'service'}" tag="li"><span>联系客服</span></router-link>-->
+<!--              <li><span>联系客服</span></li>-->
+
               <transition leave-active-class="animated hinge">
-                <li v-show="flag_shou_hou" @click="hidden" ><span>售后</span></li>
+                <li v-show="flag_tou_su" @click="flag_tou_su=false" ><span>投诉</span></li>
               </transition>
 
-              <router-link :to="{name:'tou_su'}" tag="li"><span>投诉</span></router-link>
             </ul>
           </div>
 
@@ -52,7 +62,8 @@
         props:['flag_home'],
         data(){
           return{
-            flag_shou_hou:true,
+            flag_color:'white',
+            flag_tou_su:true,
             flag_enter:false,
             user:{
               username:"",
@@ -61,23 +72,30 @@
           }
         },
         methods:{
-          hidden(){
-            this.flag_shou_hou=false;
-          },
           outenter(){
             this.$axios.post('/outEnter')
               .then(res=>{
                 this.$router.push({name:'enter'})
               })
+          },
+          getShop_CarCount(){
+            if (null != this.user && 0<this.user.shop_CarCount){
+              return this.user.shop_CarCount;
+            }
           }
         },
         created() {
+          if (!this.flag_home){
+            this.flag_color='#FF4400';
+          }
+
+
             this.$axios.post('/selUserById')
               .then(res=>{
-              this.flag_enter=res.data.flag_enter;
-              this.GLOBAL.flag_enter=res.data.flag_enter;
-              this.user=res.data.user;
-              this.GLOBAL.flag_enter=false;
+              this.flag_enter=res.data.success;
+              this.GLOBAL.flag_enter=res.data.success;
+              this.user=res.data.data;
+              this.GLOBAL.user=res.data.data;
             })
 
         }
@@ -98,7 +116,8 @@
     background: #F12F04;
     height: 40px;
   }
-  .homePage .container{
+  .homePage .containerBox{
+    margin-left: 100px;
     background: black;
     max-width: 1330px;
   }
@@ -106,14 +125,17 @@
     color: white;
     font-size: 13px;
   }
-  
+
 
   .serachPage{
     background: #F2F2F2;
     height: 26px;
-
+    width: 100%;
+    position: fixed;
+    z-index: 999;
   }
-  .serachPage .container{
+  .serachPage .containerBox{
+    margin-left: 80px;
     background: black;
     max-width: 1395px;
   }
@@ -123,14 +145,14 @@
     font-weight: lighter;
   }
   .serachPage li{
-    margin: 0px 5px;
+    margin: 0px 10px;
     position: relative;
     bottom: 6px;
   }
 
 
 
-.container{
+.containerBox{
   background: black;
   max-width: 1330px;
 }

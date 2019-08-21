@@ -41,7 +41,7 @@
            <swiper-slide><img src="../assets/lv_dou_gao_home.jpg" @click="event_click_img(40)"></swiper-slide>
            <swiper-slide><img src="../assets/mk_44.jpg" @click="event_click_img(16)"></swiper-slide>
            <swiper-slide><img src="../assets/cxk_1.jpg" @click="event_click_img(35)"></swiper-slide>
-           <swiper-slide><img src="../assets/cxk_3.jpg" @click="event_click_img(35)"></swiper-slide>
+<!--           <swiper-slide><img src="../assets/cxk_3.jpg" @click="event_click_img(35)"></swiper-slide>-->
            <!-- Optional controls -->
            <div class="swiper-pagination"  slot="pagination"></div>
            <!--        <div class="swiper-button-prev" slot="button-prev"></div>-->
@@ -73,7 +73,7 @@
               icon:'&#xe60c;',
               word:'美食'
             },
-            { 
+            {
               icon:'&#xe603;',
               word:'装饰品'
             },
@@ -147,7 +147,7 @@
 </script>
 
 <style scoped>
-.home{height:753px; width:100%; overflow:hidden;}
+  .home{height:753px; width:100%; overflow:hidden;}
   .swiperBox{
     width: 900px;
     height: 512px;

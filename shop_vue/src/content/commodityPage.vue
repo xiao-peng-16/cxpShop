@@ -101,17 +101,17 @@
                 shop_number:this.shop_number
               }
             }).then(res=>{
-              if (res.data.flag_addShop_Car){
+              if (res.data.success){
                 this.flag_notAddShop_car=false;
                 this.msg_addShopcar="已添加至购物车";
                 alert("购物车添加成功");
 
               }else {
-                if (res.data.flag_enter==false){
+                if (res.data.status==this.GLOBAL.ResponseStatus.USER_LOGIN_OVERDUE){
                   alert("请先登录");
                   this.$router.push({name:'enter'});
                 } else {
-                  this.$router.push({name:'error',params:{msg:res.data.msg}});
+                  this.$router.push({name:'error',params:{response_data:res.data}});
                 }
               }
             })
@@ -123,23 +123,21 @@
             cID:this.commodity.cID,
             shop_number:this.shop_number
           }]).then(res=>{
-              if (res.data.flag_shop){
+              if (res.data.success){
                 this.$router.push({name:'shop_success'});
               }else {
-                if (res.data.flag_enter==false){
+                if (res.data.status==this.GLOBAL.ResponseStatus.USER_LOGIN_OVERDUE){
                   alert("请先登录");
                   this.$router.push({name:'enter'});
                 } else {
-                  this.$router.push({name:'error',params:{msg:res.data.msg}});
+                  this.$router.push({name:'error',params:{response_data:res.data}});
                 }
               }
           })
         }
       },
       created() {
-             //  this.commodity = this.$qs.parse(this.$route.query.CommodityMessage);
-             // this.resource.poster = this.GLOBAL.commodityImagesUrl+this.commodity.cPhotoname;
-             // this.resource.src = this.GLOBAL.commodityVideoUrl + this.commodity.cVideoname;
+
             this.$axios.get('/selSearchDataByCID',{
               params:{
                 cID: this.$route.query.cID

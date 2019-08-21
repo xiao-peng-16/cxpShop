@@ -75,7 +75,8 @@
                 username : this.username,
                 password : this.password
               })).then(res=>{
-                if (res.data){
+                console.log(res)
+                if (res.data.success){
                     this.GLOBAL.flag_enter=true;
                     this.$router.go(-1);
                     this.$router.push({name:'home'});//防止没上一级页面
