@@ -29,7 +29,11 @@ public interface UserMapper {
     @Select("select * from user where uID = #{uID}")
     public User selUserById(@Param("uID") int uID);
 
-    //用户购物 减少余额
+    //购物 买家减少余额
     @Update("update user set money=money-#{sunPrice} where uID = #{uID}")
-    public int updUserMoney(@Param("uID") int uID, @Param("sunPrice") double sunPrice);
+    public int subUserMoney(@Param("uID") int uID, @Param("sunPrice") double sunPrice);
+
+    //购物 卖家增加余额
+    @Update("update user set money=money+#{sunPrice} where uID = #{uID}")
+    public int addUserMoney(@Param("uID") int uID, @Param("sunPrice") double sunPrice);
 }
