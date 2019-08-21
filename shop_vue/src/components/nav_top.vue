@@ -11,8 +11,8 @@
 
 
             <ul v-if="flag_enter" >
-              <li><span style="cursor:default ">Hi, {{this.user.username}}</span></li>
-              <li><span style="cursor:default">余额{{(this.user.money).toFixed(2)}}</span></li>
+              <li><span>Hi, {{this.user.username}}</span></li>
+              <li><span>余额{{(this.user.money).toFixed(2)}}</span></li>
               <li><span @click="outenter">退出</span></li>
             </ul>
             <ul v-else>
