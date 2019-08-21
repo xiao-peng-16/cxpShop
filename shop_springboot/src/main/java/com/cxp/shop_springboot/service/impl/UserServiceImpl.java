@@ -1,8 +1,8 @@
 package com.cxp.shop_springboot.service.impl;
 
+import com.cxp.shop_springboot.mapper.Shop_CarMapper;
 import com.cxp.shop_springboot.mapper.UserMapper;
 import com.cxp.shop_springboot.pojo.User;
-import com.cxp.shop_springboot.pojo.messageResponse.Message_User_FlagEnter;
 import com.cxp.shop_springboot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserMapper userMapper;
-
+    @Autowired
+    Shop_CarMapper shop_carMapper;
     @Override
     public Boolean insUser(User user) {
         return userMapper.insUser(user)>0;
@@ -38,30 +39,31 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User selUserById(int id) {
-        return userMapper.selUserById(id);
+    public User selUserById(int userId) {
+        User user = userMapper.selUserById(userId);
+        Integer shop_CarCount = shop_carMapper.selShop_CarCountByUID(userId);
+        if (null!=shop_CarCount){
+            user.setShop_CarCount(shop_CarCount);
+        }else {
+            user.setShop_CarCount(0);
+        }
+        return user;
     }
 
     @Override
-    public Message_User_FlagEnter selUser_FlagEnterById(HttpSession session) {
-
+    public User selUserById(HttpSession session) {
         Integer uid = (Integer) session.getAttribute("uid");
-        Message_User_FlagEnter message = new Message_User_FlagEnter();
         //默认值
-        message.setFlag_enter(false);
         if (uid!=null){
-            User user = userMapper.selUserById(uid);
-            if (user!=null){
-                user.setPassword("");
-                message.setFlag_enter(true);
-                message.setUser(user);
-            }else {
-                message.setMsg("用户id错误");
-            }
+            return selUserById(uid);
         }else {
-            message.setMsg("用户未登录,session的id为空值");
+            return null;
         }
-        return message;
+    }
+
+    @Override
+    public Integer selUserId(HttpSession session) {
+        return (Integer) session.getAttribute("uid");
     }
 
 

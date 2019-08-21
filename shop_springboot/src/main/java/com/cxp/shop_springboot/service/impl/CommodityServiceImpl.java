@@ -1,21 +1,22 @@
 package com.cxp.shop_springboot.service.impl;
 
 import com.cxp.shop_springboot.mapper.CommodityMapper;
+import com.cxp.shop_springboot.mapper.OrderFormMapper;
 import com.cxp.shop_springboot.mapper.UserMapper;
 import com.cxp.shop_springboot.pojo.Commodity;
-import com.cxp.shop_springboot.pojo.Order_Commodity;
-import com.cxp.shop_springboot.pojo.messageRequest.SearchPage_Request;
+import com.cxp.shop_springboot.pojo.Order;
+
+import com.cxp.shop_springboot.pojo.request.SearchPage_Request;
 import com.cxp.shop_springboot.pojo.User;
-import com.cxp.shop_springboot.pojo.messageResponse.Message_Shop;
-import com.cxp.shop_springboot.pojo.messageResponse.Message_User_FlagEnter;
+import com.cxp.shop_springboot.pojo.response.ResponseBean;
+import com.cxp.shop_springboot.pojo.response.ResponseFactory;
+import com.cxp.shop_springboot.pojo.response.ResponseStatus;
 import com.cxp.shop_springboot.service.CommodityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,8 @@ public class CommodityServiceImpl implements CommodityService {
     UserServiceImpl userService;
     @Autowired
     CommodityMapper commodityMapper;
+    @Autowired
+    OrderFormMapper orderFormMapper;
 
     public void setPageStartLen(SearchPage_Request searchPage_request) {
         if(searchPage_request.getPageNo()!=null && searchPage_request.getPageStepSize()!=null){
@@ -90,26 +93,34 @@ public class CommodityServiceImpl implements CommodityService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public Boolean updShop(User user, List<Order_Commodity> order_commodityList) throws Exception {
-        List<Commodity> commodityList = new ArrayList<>();
+    public Boolean addCommodityStock(User user, List<Order> orderList) throws CommodityByIdException, CommodityStockInsufficientException, UserNotSufficientFundsException {
         double sunPrice=0;
-        for ( Order_Commodity order_commodity : order_commodityList){
-            Commodity commodity = commodityMapper.selSimplifyDataByCID(order_commodity.getcID());
-            if (commodity==null) { throw new Exception(order_commodity.getcID()+"的selSimplifyDataByCID结果为null"); }
-            if (commodity.getcStock()<=0){ throw new Exception(commodity.getcName()+"commodity库存不大于0"); }
-            sunPrice += commodity.getcPrice()*order_commodity.getShop_number();
-            commodityList.add(commodity);
+        for ( Order order : orderList){
+            Commodity commodity = commodityMapper.selSimplifyDataByCID(order.getcID());
+            if (commodity==null) { throw new CommodityByIdException(order.getcID()+"的selSimplifyDataByCID结果为null"); }
+            if (commodity.getcStock()< order.getShop_number()){
+                throw new CommodityStockInsufficientException(commodity.getcName()+"commodity库存不足");
+            }
+            order.setuID(user.getuID());
+            order.setStoreID(commodity.getStoreID());
+            order.setcPrice(commodity.getcPrice());
+            order.setoSumPrice(commodity.getcPrice()*order.getShop_number());
+            sunPrice += order.getoSumPrice();
+
         }
         if (user.getMoney() < sunPrice) {
-            throw new Exception("user余额不足");
+            throw new UserNotSufficientFundsException("user余额不足");
         }else {
             //买家扣钱
-            int userLen = userMapper.updUserMoney(user.getuID(), sunPrice);
-            if (userLen==0){throw new RuntimeException("userLen==0");}
-            //卖家 商品数量变动
-            for ( Order_Commodity order_commodity : order_commodityList){
-                int commodityLen = commodityMapper.updShop(order_commodity);
-                if (commodityLen==0){throw new RuntimeException("commodityLen==0");}
+            userMapper.subUserMoney(user.getuID(), sunPrice);
+            //卖家 商品数量变动  加钱
+            for ( Order order : orderList){
+                //商品库存 销量更新
+                commodityMapper.addCommodityStock(order);
+                //商家  赚钱
+                userMapper.addUserMoney(order.getStoreID(),order.getoSumPrice());
+                //生成订单
+                orderFormMapper.addOrderForm(order);
             }
             return true;
         }
@@ -117,28 +128,37 @@ public class CommodityServiceImpl implements CommodityService {
     }
 
 
-
-    public Message_Shop UserShop(List<Order_Commodity> order_commodityList, HttpSession session){
-        Message_Shop message_shop = new Message_Shop();
-
-        Message_User_FlagEnter message_user_flagEnter = userService.selUser_FlagEnterById(session);
-
-        if (message_user_flagEnter.isFlag_enter()){
-            message_shop.setFlag_enter(true);
+    @Override
+    public ResponseBean UserShop(List<Order> orderList, User user){
             try {
-                boolean bool = updShop(message_user_flagEnter.getUser(), order_commodityList);
-                message_shop.setFlag_shop(bool);
-            } catch (Exception e) {
+                addCommodityStock(user, orderList);
+                return ResponseFactory.createSuccessResponse();
+            } catch (CommodityStockInsufficientException e) {
                 e.printStackTrace();
-                message_shop.setFlag_shop(false);
-                message_shop.setMsg(e.toString());
+                return ResponseFactory.createFailResponse(ResponseStatus.COMMODITY_STOCK_INSUFFICIENT);
+            } catch (CommodityByIdException e) {
+                e.printStackTrace();
+                return ResponseFactory.createFailResponse(ResponseStatus.COMMODITY_ID_ERROR);
+            } catch (UserNotSufficientFundsException e) {
+                e.printStackTrace();
+                return ResponseFactory.createFailResponse(ResponseStatus.SHOP_NOT_SUFFICIENT_FUNDS);
             }
-        }else {
-            message_shop.setFlag_shop(false);
-            message_shop.setFlag_enter(false);
-            message_shop.setMsg(message_user_flagEnter.getMsg());
-        }
-        return message_shop;
     }
 
+
+    static class UserNotSufficientFundsException extends Exception{
+        public UserNotSufficientFundsException(String message) {
+            super(message);
+        }
+    }
+    static class CommodityByIdException extends Exception{
+        public CommodityByIdException(String message) {
+            super(message);
+        }
+    }
+    static class CommodityStockInsufficientException extends Exception{
+        public CommodityStockInsufficientException(String message) {
+            super(message);
+        }
+    }
 }

@@ -1,7 +1,7 @@
 package com.cxp.shop_springboot.service;
 
 import com.cxp.shop_springboot.pojo.User;
-import com.cxp.shop_springboot.pojo.messageResponse.Message_User_FlagEnter;
+import com.cxp.shop_springboot.pojo.response.ResponseBean;
 
 import javax.servlet.http.HttpSession;
 
@@ -15,8 +15,9 @@ public interface UserService {
     public User selUserByPassword(User user);
 
     // 根据id
-    public User selUserById(int id);
+    public User selUserById(int  userId);
+    public User selUserById(HttpSession session);
 
-    public Message_User_FlagEnter selUser_FlagEnterById(HttpSession session);
 
+    public Integer selUserId(HttpSession session);
 }
