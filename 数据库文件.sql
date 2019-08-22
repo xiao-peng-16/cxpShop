@@ -9,16 +9,6 @@ create table user(
 		money  decimal(10,2) default 0.00 comment '余额'
 );
 
-insert user(uID,username,password) values(1,'小百','123456');
-insert user(uID,username,password) values(2,'小史','123456');
-insert user(uID,username,password) values(3,'小珠','123456');
-insert user(uID,username,password) values(4,'小水','123456');
-insert user(uID,username,password) values(5,'小宠','123456');
-insert user(uID,username,password) values(6,'小运','123456');
-insert user(uID,username,password) values(7,'小服','123456');
-insert user(uID,username,password) values(9,'小手','123456');
-insert user(uID,username,password,money) values(10,'晓鹏','123456',1433223.00);
-
 
 /*店铺表*/
 create table store(
@@ -30,32 +20,12 @@ create table store(
 		sGradeAttitude float(6,5) default 4.84892 comment '服务态度',
 		sGradeDeliverySpeed float(6,5) default 4.82483 comment '发货速度'
 );
-insert store(storeID,storeName,sProvince,sCity) values(1,'百货店铺','广东','深圳');
-insert store(storeID,storeName,sProvince,sCity) values(2,'史塔克工业','美国','纽约');
-insert store(storeID,storeName,sProvince,sCity) values(3,'珠宝店','','上海');
-insert store(storeID,storeName,sProvince,sCity) values(4,'水果店','海南','海口');
-insert store(storeID,storeName,sProvince,sCity) values(5,'宠物店','','北京');
-insert store(storeID,storeName,sProvince,sCity) values(6,'运动健身店','浙江','杭州');
-insert store(storeID,storeName,sProvince,sCity) values(7,'服装店','广东','广州 ');
-insert store(storeID,storeName,sProvince,sCity) values(9,'手机店','浙江','杭州');
-insert store(storeID,storeName,sProvince,sCity) values(10,'美食店','广东','深圳');
-
 
 /*商品种类*/
 create table sort(
 	sortID int primary key auto_increment,
 	sortname varchar(20) comment '种类名称'
 );
-insert sort(sortId,sortname) values (1,'装饰品');
-insert sort(sortId,sortname) values (2,'男装');
-insert sort(sortId,sortname) values (3,'珠宝宝石项链首饰钻石戒指手镯玉石');
-insert sort(sortId,sortname) values (4,'水果');
-insert sort(sortId,sortname) values (5,'宠物猫狗鹦鹉熊蜗牛');
-insert sort(sortId,sortname) values (6,'运动健身篮球');
-insert sort(sortId,sortname) values (7,'女装');
-insert sort(sortId,sortname) values (8,'童装');
-insert sort(sortId,sortname) values (9,'手机');
-insert sort(sortId,sortname) values (10,'美食');
 
 
 /*商品表*/
@@ -100,6 +70,51 @@ create table order_form(
 	oSumPrice decimal(10,2) comment '该订单总金额',
 	oDateTime datetime default NOW() comment '时间'
 );
+
+
+
+
+
+
+/*用户表*/
+
+insert user(uID,username,password,money) values(1,'小百','123456',6000);
+insert user(uID,username,password,money) values(2,'小史','123456',6000);
+insert user(uID,username,password,money) values(3,'小珠','123456',6000);
+insert user(uID,username,password,money) values(4,'小水','123456',6000);
+insert user(uID,username,password,money) values(5,'小宠','123456',6000);
+insert user(uID,username,password,money) values(6,'小运','123456',6000);
+insert user(uID,username,password,money) values(7,'小服','123456',6000);
+insert user(uID,username,password,money) values(9,'小手','123456',6000);
+insert user(uID,username,password,money) values(10,'晓鹏','123456',1433223.00);
+
+
+/*店铺表*/
+
+insert store(storeID,storeName,sProvince,sCity) values(1,'百货店铺','广东','深圳');
+insert store(storeID,storeName,sProvince,sCity) values(2,'史塔克工业','美国','纽约');
+insert store(storeID,storeName,sProvince,sCity) values(3,'珠宝店','','上海');
+insert store(storeID,storeName,sProvince,sCity) values(4,'水果店','海南','海口');
+insert store(storeID,storeName,sProvince,sCity) values(5,'宠物店','','北京');
+insert store(storeID,storeName,sProvince,sCity) values(6,'运动健身店','浙江','杭州');
+insert store(storeID,storeName,sProvince,sCity) values(7,'服装店','广东','广州 ');
+insert store(storeID,storeName,sProvince,sCity) values(9,'手机店','浙江','杭州');
+insert store(storeID,storeName,sProvince,sCity) values(10,'美食店','广东','深圳');
+
+/*商品种类*/
+insert sort(sortId,sortname) values (1,'装饰品');
+insert sort(sortId,sortname) values (2,'男装');
+insert sort(sortId,sortname) values (3,'珠宝宝石项链首饰钻石戒指手镯玉石');
+insert sort(sortId,sortname) values (4,'水果');
+insert sort(sortId,sortname) values (5,'宠物猫狗鹦鹉熊蜗牛');
+insert sort(sortId,sortname) values (6,'运动健身篮球');
+insert sort(sortId,sortname) values (7,'女装');
+insert sort(sortId,sortname) values (8,'童装');
+insert sort(sortId,sortname) values (9,'手机');
+insert sort(sortId,sortname) values (10,'美食');
+
+
+/*商品表*/
 
 insert commodity(storeID,sortID,cName,cDescribe,bao_you,cPhotoname,cVideoname,cPrice,cStock) 
 	values(1,1,'汽车摆件摇头公仔网红创意可爱表情包个性车载车内装饰品漂亮摆件','车内饰品摆件 可爱个性创意',false,'qi_che_bai_jian.jpg',null,28.00,9999);
@@ -228,3 +243,39 @@ insert commodity(storeID,sortID,cName,cDescribe,bao_you,cPhotoname,cVideoname,cP
 	values(10,10,'开水白菜','“开水白菜“被评为“中国菜”四川十大经典名菜',false,'kai_shui_bai_cai.jpg',null,88.50,9999);
 insert commodity(storeID,sortID,cName,cDescribe,bao_you,cPhotoname,cVideoname,cPrice,cStock)  
 	values(10,10,'三文鱼寿司','铺上三文鱼肉和用酱油浸过的三文鱼籽、秋葵、蛋皮，最后撒上紫苏叶丝、紫菜',true,'san_wen_yu_shou_si.jpg',null,28.99,9999);
+
+
+/*    以下数据可删除 作业为 方便测试/展示    */
+
+
+/* 用户 晓鹏的  收藏夹    ---可删除  */
+INSERT INTO `favorite`(`fID`, `uID`, `cID`) VALUES (13, 10, 5);
+INSERT INTO `favorite`(`fID`, `uID`, `cID`) VALUES (14, 10, 36);
+INSERT INTO `favorite`(`fID`, `uID`, `cID`) VALUES (15, 10, 4);
+INSERT INTO `favorite`(`fID`, `uID`, `cID`) VALUES (16, 10, 3);
+INSERT INTO `favorite`(`fID`, `uID`, `cID`) VALUES (17, 10, 40);
+INSERT INTO `favorite`(`fID`, `uID`, `cID`) VALUES (18, 10, 7);
+INSERT INTO `favorite`(`fID`, `uID`, `cID`) VALUES (19, 10, 16);
+INSERT INTO `favorite`(`fID`, `uID`, `cID`) VALUES (20, 10, 6);
+INSERT INTO `favorite`(`fID`, `uID`, `cID`) VALUES (21, 10, 1);
+INSERT INTO `favorite`(`fID`, `uID`, `cID`) VALUES (22, 10, 24);
+INSERT INTO `favorite`(`fID`, `uID`, `cID`) VALUES (23, 10, 23);
+INSERT INTO `favorite`(`fID`, `uID`, `cID`) VALUES (24, 10, 22);
+INSERT INTO `favorite`(`fID`, `uID`, `cID`) VALUES (25, 10, 27);
+INSERT INTO `favorite`(`fID`, `uID`, `cID`) VALUES (26, 10, 39);
+INSERT INTO `favorite`(`fID`, `uID`, `cID`) VALUES (27, 10, 31);
+INSERT INTO `favorite`(`fID`, `uID`, `cID`) VALUES (28, 10, 34);
+INSERT INTO `favorite`(`fID`, `uID`, `cID`) VALUES (29, 10, 28);
+INSERT INTO `favorite`(`fID`, `uID`, `cID`) VALUES (30, 10, 26);
+INSERT INTO `favorite`(`fID`, `uID`, `cID`) VALUES (31, 10, 18);
+
+
+/* 卖家晓鹏 的出售订单 */
+
+
+INSERT INTO `order_form`(`oID`, `uID`, `storeID`, `cID`, `shop_number`, `cPrice`, `oSumPrice`, `oDateTime`) VALUES (1, 6, 10, 42, 12, 30.99, 371.88, '2019-06-01 12:27:00');
+INSERT INTO `order_form`(`oID`, `uID`, `storeID`, `cID`, `shop_number`, `cPrice`, `oSumPrice`, `oDateTime`) VALUES (2, 6, 10, 48, 6, 11.00, 66.00, '2019-08-22 12:27:58');
+INSERT INTO `order_form`(`oID`, `uID`, `storeID`, `cID`, `shop_number`, `cPrice`, `oSumPrice`, `oDateTime`) VALUES (3, 2, 10, 47, 12, 14.80, 177.60, '2019-08-22 12:28:42');
+INSERT INTO `order_form`(`oID`, `uID`, `storeID`, `cID`, `shop_number`, `cPrice`, `oSumPrice`, `oDateTime`) VALUES (4, 2, 10, 55, 20, 65.50, 1310.00, '2019-08-22 12:29:08');
+INSERT INTO `order_form`(`oID`, `uID`, `storeID`, `cID`, `shop_number`, `cPrice`, `oSumPrice`, `oDateTime`) VALUES (5, 4, 10, 47, 13, 14.80, 192.40, '2019-08-22 12:29:53');
+INSERT INTO `order_form`(`oID`, `uID`, `storeID`, `cID`, `shop_number`, `cPrice`, `oSumPrice`, `oDateTime`) VALUES (6, 3, 10, 54, 7, 78.00, 546.00, '2019-08-22 12:30:35');
