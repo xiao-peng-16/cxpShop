@@ -16,7 +16,7 @@
           <div style="width: 100%;border: 1px solid gray" >
             <img :src="item.cPhotoname" style="height: 164px;width:164px" >
           </div>
-          <div><span>{{item.cName}}</span></div>
+          <div class="cNameBox"><span>{{item.cName}}</span></div>
           <div><span style="color: #FF4400">￥{{(item.cPrice).toFixed(2)}}</span></div>
         </div>
       </div>
@@ -101,13 +101,14 @@
     margin-right: 18px;
     text-align: center;
 
-    overflow: hidden;
-    text-overflow:ellipsis;
-    white-space: nowrap;
-
-
   }
+ .cNameBox{
+   overflow: hidden;
+   text-overflow:ellipsis;
+   white-space: nowrap;
 
+
+ }
 
 
   #tiangou{
