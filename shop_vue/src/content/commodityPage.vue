@@ -1,70 +1,68 @@
 <template>
   <div>
       <nav_top :flag_home="false"/><br/>
-      <div class="container">
-        <div class="box row">
-          
-          <div class="col-6">
-            <div class="imgVideoBox ">
-              <div v-if="this.commodity.cVideoname!='' &&this.commodity.cVideoname!=null" class="videoBox"><video_component :resource="resource"/></div>
-              <div v-else class="imgBox"><img :src="resource.poster"></div>
-            </div>
-          </div>
+      <div ref="box"  style="margin-top: 35px;margin-left: 15%;position: relative;">
 
-          <div class="col-6">
-              <div class="messageBox">
-
-                  <div class="topBox">
-                    <span class="cName">{{commodity.cName}}</span><br/>
-                    <div class="beizhu"><span>{{commodity.cDescribe}}</span></div>
-                  </div>
-
-                  <div class="priceBox">
-                      <span class="price_left">价格</span>
-                      <span class="price_right">{{parseInt(commodity.cPrice).toFixed(2)}}</span>
-                  </div>
-
-                  <div class="split"></div>
-                  <div class="middleBox">
-                    <div>
-                      <span class="middleBox_left">销量</span>
-                      <span class="middleBox_right">{{commodity.cSalesVolume}} </span>
-                    </div>
-                    <span class="middleBox_solit">|</span>
-                    <div>
-                      <span class="middleBox_left">人气</span>
-                      <span class="middleBox_right">{{commodity.cPopularity}} </span>
-                    </div>
-                    <span class="middleBox_solit">|</span>
-                    <div>
-                      <span class="middleBox_left">送天狗积分</span>
-                    </div>
-                  </div>
-                  <div class="split"></div>
-
-                  <div class="shop_numberBox">
-                    <span class="shu_liang">数量</span>
-                    <div class="numBox">
-                      <span @click="shop_number--" class="arrows_left iconfont">&#xe610;</span>
-                      <input v-model.number="shop_number" type="text">
-                      <span @click="shop_number++" class="arrows_right iconfont">&#xf034f;</span>
-                    </div>
-                    <span class="cStock">库存{{commodity.cStock}}件 </span>
-                  </div>
-
-                    <div class="buttonBox">
-                      <div class="buttonBox_left" @click="shop"><span>立刻购买</span></div>
-                      <div class="buttonBox_right" @click="addShop_Car" :class="{buttonBox_right_notAdd:this.flag_notAddShop_car,buttonBox_right_Add:!this.flag_notAddShop_car}">
-                        <span class="iconfont">&#xe63a;</span>
-                        <span>{{this.msg_addShopcar}}</span>
-                      </div>
-                    </div>
+            <div v-if="this.commodity.cVideoname!='' &&this.commodity.cVideoname!=null" class="videoBox"><video_component :resource="resource"/></div>
+            <div v-else    style="position: relative;">
+              <div @mouseenter="mouseenter" @mousemove="mousemove" @mouseleave="mouseleave" style="float: left;background: red  " >
+                <div id="popup" ref="popup"></div>
+                <div class="smallImgBox"  ref="smallImgBox" ><img ref="smallImg"  :src="resource.poster"></div>
               </div>
+              <div class="bigImgBox" ref="bigImgBox"><img ref="bigImg" :src="resource.poster"></div>
+            </div>
+
+          <div class="messageBox" :style="{marginLeft:marginLeft+'px'}" style="z-index: 0;" >
+
+              <div class="topBox">
+                <span class="cName">{{commodity.cName}}</span><br/>
+                <div class="beizhu"><span>{{commodity.cDescribe}}</span></div>
+              </div>
+
+              <div class="priceBox">
+                  <span class="price_left">价格</span>
+                  <span class="price_right">{{parseInt(commodity.cPrice).toFixed(2)}}</span>
+              </div>
+
+              <div class="split"></div>
+              <div class="middleBox">
+                <div>
+                  <span class="middleBox_left">销量</span>
+                  <span class="middleBox_right">{{commodity.cSalesVolume}} </span>
+                </div>
+                <span class="middleBox_solit">|</span>
+                <div>
+                  <span class="middleBox_left">人气</span>
+                  <span class="middleBox_right">{{commodity.cPopularity}} </span>
+                </div>
+                <span class="middleBox_solit">|</span>
+                <div>
+                  <span class="middleBox_left">送天狗积分</span>
+                </div>
+              </div>
+              <div class="split"></div>
+
+              <div class="shop_numberBox">
+                <span class="shu_liang">数量</span>
+                <div class="numBox">
+                  <span @click="shop_number--" class="arrows_left iconfont">&#xe610;</span>
+                  <input v-model.number="shop_number" type="text">
+                  <span @click="shop_number++" class="arrows_right iconfont">&#xf034f;</span>
+                </div>
+                <span class="cStock">库存{{commodity.cStock}}件 </span>
+              </div>
+
+                <div class="buttonBox">
+                  <div class="buttonBox_left" @click="shop"><span>立刻购买</span></div>
+                  <div class="buttonBox_right" @click="addShop_Car" :class="{buttonBox_right_notAdd:this.flag_notAddShop_car,buttonBox_right_Add:!this.flag_notAddShop_car}">
+                    <span class="iconfont">&#xe63a;</span>
+                    <span>{{this.msg_addShopcar}}</span>
+                  </div>
+                </div>
           </div>
-          
+
         </div>
 
-      </div>
 
 
   </div>
@@ -89,7 +87,11 @@
             resource:{
               poster:"",
               src:""
-            }
+            },
+            popup_d:0,
+            smallImgMax_w:0,
+            smallImgMax_h:0,
+            marginLeft:0
           }
       },
       methods:{
@@ -134,6 +136,36 @@
                 }
               }
           })
+        },
+        mouseenter(){
+          this.$refs.popup.style.display = 'inline-block';
+          this.$refs.bigImgBox.style.display = 'inline-block';
+          this.popup_d = this.$refs.popup.offsetWidth  ;
+          this.smallImgMax_w = this.$refs.smallImgBox.offsetWidth - this.popup_d;
+          this.smallImgMax_h = this.$refs.smallImgBox.offsetHeight - this.popup_d;
+        },
+
+        mouseleave(){
+            this.$refs.popup.style.display = 'none';
+            this.$refs.bigImgBox.style.display = 'none';
+        },
+        mousemove(event){
+          var left = event.clientX  - this.$refs.box.offsetLeft - this.popup_d/2;
+          var top = event.clientY  - this.$refs.box.offsetTop - this.popup_d/2;
+
+          left = left>=0?left:0;
+          top = top>=0?top:0;
+          left = left<=this.smallImgMax_w?left:this.smallImgMax_w;
+          top = top<=this.smallImgMax_h?top:this.smallImgMax_h;
+
+          this.$refs.popup.style.left = left + 'px';
+          this.$refs.popup.style.top = top + 'px';
+
+          var bigBoxLeft = -left/this.smallImgMax_w * (this.$refs.bigImg.offsetWidth -this.$refs.bigImgBox.offsetWidth);
+          var bigBoxTop = -top/this.smallImgMax_h * (this.$refs.bigImg.offsetHeight -this.$refs.bigImgBox.offsetHeight);
+
+          this.$refs.bigImg.style.left = bigBoxLeft + 'px';
+          this.$refs.bigImg.style.top = bigBoxTop + 'px';
         }
       },
       created() {
@@ -146,6 +178,7 @@
               this.commodity = res.data;
               this.resource.poster = this.GLOBAL.commodityImagesUrl+this.commodity.cPhotoname;
               this.resource.src = this.GLOBAL.commodityVideoUrl + this.commodity.cVideoname;
+              this.marginLeft = this.commodity.cVideoname!='' &&this.commodity.cVideoname!=null? -60:-110;
             })
         // this.resource.src = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
       },
@@ -170,32 +203,55 @@
   .middleBox_left, .cStock, .middleBox_solit , .shu_liang{
     color: #999;
   }
-  .container{
-    max-width: 1300px;
-  }
   .videoBox{
     width: 650px;
-    margin: auto auto;
-    position: absolute;
-    top: 10%;
+    margin-top: 40px;
+    margin-left: -50px;
     }
-  .box{
-    height: 460px;
+  #popup{
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    background: red;
+    opacity: 0.4;
+    width: 200px;
+    height: 200px;
+    display: none;
   }
-  .imgBox{
-      position: absolute;
-      left: 50%;
-      transform: translate(-50%);
+  .smallImgBox{
+      float: left;
+      border: 1px solid gray;
   }
-  .imgBox img{
+  .smallImgBox img{
     margin: 0px auto;
-
     height: 460px;
+  }
+  .bigImgBox {
+    float: left;
+    z-index: 10;
+    border: 1px solid gray;
+    display: none;
+    height: 600px;
+    width: 600px;
+    overflow: hidden;
+    position: relative;
+  }
+  .bigImgBox img{
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    height: 900px;
   }
   .messageBox{
     margin-top: 40px;
+
+
     width: 440px;
     height: 400px;
+
+    position: absolute;
+    top: -30px;
+    left: 700px;
   }
   .topBox{
     margin: 10px;
